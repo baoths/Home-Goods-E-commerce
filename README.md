@@ -5,47 +5,85 @@ Website bán đồ gia dụng online với Clean Architecture và SOLID principl
 ## 📋 Giới thiệu
 
 Dự án fullstack e-commerce:
-- **Backend**: Python FastAPI với Clean Architecture
-- **Frontend**: Next.js 14 + TypeScript
+- **Frontend**: Next.js 14 + TypeScript + TailwindCSS
+- **Backend**: Python FastAPI với Clean Architecture (Optional)
 - **Database**: PostgreSQL (NeonDB) với Prisma ORM
+- **Authentication**: JWT-based auth
+- **State Management**: React Hooks + localStorage
 
-## 🚀 Cài đặt
+## ✨ Tính năng
 
-### Frontend
+### 🛍️ Người dùng
+- ✅ Đăng ký/Đăng nhập với JWT authentication
+- ✅ Xem danh sách sản phẩm với pagination & filters
+- ✅ Tìm kiếm sản phẩm
+- ✅ Xem chi tiết sản phẩm với gallery hình ảnh
+- ✅ Lọc sản phẩm theo category
+- ✅ Sắp xếp sản phẩm (mới nhất, giá, tên)
+- ✅ Cập nhật profile với avatar upload (Base64)
+- ✅ Responsive design
+
+### 👨‍💼 Admin
+- ✅ Dashboard thống kê (sản phẩm, categories, users, orders)
+- ✅ Quản lý sản phẩm (CRUD)
+  - Thêm/sửa/xóa sản phẩm
+  - Upload hình ảnh (single + multiple images)
+  - Quản lý stock, giá, discount
+- ✅ Quản lý categories (CRUD)
+- ✅ Quản lý users (view, edit, delete)
+- ✅ Role-based access control
+
+## 🚀 Quick Start
+
+### 1. Clone Repository
+
+```bash
+git clone <repository-url>
+cd Home-Goods-E-commerce
+```
+
+### 2. Setup Frontend
 
 ```bash
 cd frontend
-pnpm i
+npm install
+# hoặc
+pnpm install
 ```
 
-> Script `postinstall` sẽ tự động chạy `prisma generate`
+**Cấu hình database:**
+1. Copy `.env.example` thành `.env`
+2. Cập nhật `DATABASE_URL` và `JWT_SECRET`
 
-### Backend
+```bash
+npx prisma generate
+npx prisma db push
+npm run dev
+```
 
+→ Frontend: http://localhost:3000
+
+### 3. Setup Backend (Optional)
+
+Backend Python là optional vì frontend đã có API routes riêng. Nếu muốn sử dụng:
+
+**Windows:**
 ```bash
 cd backend
-python -m venv venv
-venv\Scripts\activate  # Windows
-pip install -r requirements.txt
+setup.bat
+start.bat
 ```
 
-## ▶️ Chạy ứng dụng
-
-### Frontend
-```bash
-cd frontend
-pnpm dev
-```
-→ http://localhost:3000
-
-### Backend
+**macOS/Linux:**
 ```bash
 cd backend
-venv\Scripts\activate
-python main.py
+chmod +x setup.sh start.sh
+./setup.sh
+./start.sh
 ```
-→ http://localhost:8000  
-→ http://localhost:8000/docs (API Documentation)
+
+→ Backend API: http://localhost:8000  
+→ API Docs: http://localhost:8000/docs
 
 ## 📁 Cấu trúc dự án
 
@@ -226,38 +264,171 @@ use_case = CreateProductUseCase(PrismaProductRepository())
 use_case = CreateProductUseCase(MongoProductRepository())
 ```
 
-## 🎨 Features
+## 🗄️ Database Schema
 
-### Admin
-- Quản lý sản phẩm (CRUD)
-- Quản lý danh mục
-- Quản lý banner trang chủ
-- Upload ảnh sản phẩm (frontend convert to base64)
-- Quản lý đơn hàng
+### Tables
 
-### User
-- Xem sản phẩm theo danh mục
-- Tìm kiếm sản phẩm
-- Giỏ hàng
-- Đặt hàng
-- Đổi avatar
-- Lịch sử đơn hàng
+- **User**: Người dùng (customers & admins)
+- **Category**: Danh mục sản phẩm
+- **Product**: Sản phẩm với images (Base64)
+- **Order**: Đơn hàng
+- **OrderItem**: Chi tiết đơn hàng
+
+### Key Features
+
+- ✅ PostgreSQL với Prisma ORM
+- ✅ UUID primary keys
+- ✅ Timestamps (createdAt, updatedAt)
+- ✅ Foreign key relationships
+- ✅ Base64 image storage
+- ✅ Indexes trên slug và email
+
+## 🔐 Authentication
+
+- **JWT-based authentication**
+- Token expiration: 30 minutes
+- Roles: ADMIN, CUSTOMER
+- Protected routes với middleware
+- Password hashing với bcrypt
+
+## 🎨 UI/UX Features
+
+### Responsive Design
+- Mobile-first approach
+- Breakpoints: sm, md, lg, xl
+- Touch-friendly buttons
+- Optimized images
+
+### Image Handling
+- Base64 encoding/decoding
+- Image compression (800px max width)
+- Multiple image support
+- Gallery view với thumbnails
+- Avatar upload với preview
+
+### User Experience
+- Loading states
+- Error handling
+- Form validation
+- Toast notifications
+- Smooth transitions
+- Hover effects
 
 ## 🔧 Tech Stack
 
-**Backend:**
-- FastAPI - Web framework
-- Pydantic - Data validation
-- python-jose - JWT authentication
-- bcrypt - Password hashing
-
 **Frontend:**
-- Next.js 14 - React framework
-- TypeScript - Type safety
-- Prisma - ORM
-- TailwindCSS - Styling
-- Canvas API - Image processing & base64 conversion
+- **Framework**: Next.js 14 (App Router)
+- **Language**: TypeScript
+- **Styling**: TailwindCSS
+- **Database**: Prisma ORM
+- **Auth**: JWT (jsonwebtoken)
+- **Image**: Canvas API (Base64 conversion)
+- **HTTP**: Fetch API
+
+**Backend (Optional):**
+- **Framework**: FastAPI
+- **Language**: Python 3.9+
+- **ORM**: SQLAlchemy
+- **Validation**: Pydantic
+- **Auth**: PyJWT
+- **Password**: bcrypt
+- **Database**: PostgreSQL via psycopg2
+
+## 📝 API Endpoints
+
+### Frontend API Routes (Next.js)
+
+**Auth:**
+- `POST /api/auth/register` - Đăng ký
+- `POST /api/auth/login` - Đăng nhập
+- `GET /api/auth/me` - Current user
+- `PUT /api/auth/me` - Update profile
+
+**Products:**
+- `GET /api/products` - List products
+- `GET /api/products/[id]` - Product detail
+- `POST /api/products` - Create (Admin)
+- `PUT /api/products/[id]` - Update (Admin)
+- `DELETE /api/products/[id]` - Delete (Admin)
+
+**Categories:**
+- `GET /api/categories` - List categories
+- `GET /api/categories/[id]` - Category detail
+- `POST /api/categories` - Create (Admin)
+- `PUT /api/categories/[id]` - Update (Admin)
+- `DELETE /api/categories/[id]` - Delete (Admin)
+
+**Users:**
+- `GET /api/users` - List users (Admin)
+- `GET /api/users/[id]` - User detail (Admin)
+- `PUT /api/users/[id]` - Update user (Admin)
+- `DELETE /api/users/[id]` - Delete user (Admin)
+
+**Admin:**
+- `GET /api/admin/statistics` - Dashboard stats
+
+## 🚀 Deployment
+
+### Frontend (Vercel)
+
+```bash
+cd frontend
+vercel
+```
+
+### Backend (Render/Railway)
+
+```bash
+cd backend
+# Deploy theo hướng dẫn của platform
+```
+
+### Database (NeonDB)
+
+1. Tạo project tại neon.tech
+2. Copy DATABASE_URL
+3. Update .env files
+4. Run `npx prisma db push`
+
+## 🧪 Testing
+
+```bash
+# Frontend
+cd frontend
+npm test
+
+# Backend  
+cd backend
+pytest
+```
+
+## 📚 Documentation
+
+- **Frontend**: See `/frontend/README.md`
+- **Backend**: See `/backend/README.md`
+- **API Docs**: http://localhost:8000/docs (when backend running)
+
+## 🤝 Contributing
+
+1. Fork repository
+2. Create feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to branch (`git push origin feature/AmazingFeature`)
+5. Open Pull Request
 
 ## 📄 License
 
-MIT
+MIT License - see LICENSE file for details
+
+## 👥 Authors
+
+- Backend Architecture: Clean Architecture + SOLID principles
+- Frontend: Next.js 14 + TypeScript
+- Database: PostgreSQL with Prisma
+
+## 🙏 Acknowledgments
+
+- FastAPI documentation
+- Next.js documentation
+- Clean Architecture by Robert C. Martin
+- SOLID principles

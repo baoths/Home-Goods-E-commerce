@@ -185,7 +185,7 @@ export default function ProfilePage() {
                   <Link href="/orders" className="block px-4 py-2 text-sm text-black hover:bg-gray-100">
                     Đơn hàng của tôi
                   </Link>
-                  {user.role === 'admin' && (
+                  {user.role === 'ADMIN' && (
                     <Link href="/admin" className="block px-4 py-2 text-sm text-black hover:bg-gray-100">
                       Quản trị
                     </Link>

@@ -184,7 +184,7 @@ export default function ProductDetailPage() {
                       <Link href="/orders" className="block px-4 py-2 text-sm text-black hover:bg-gray-100">
                         Đơn hàng của tôi
                       </Link>
-                      {user.role === 'admin' && (
+                      {user.role === 'ADMIN' && (
                         <Link href="/admin" className="block px-4 py-2 text-sm text-black hover:bg-gray-100">
                           Quản trị
                         </Link>
@@ -254,20 +254,42 @@ export default function ProductDetailPage() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
           {/* Images */}
           <div>
-            <div className="bg-gray-100 aspect-square rounded-lg flex items-center justify-center mb-4">
-              <span className="text-9xl">{product.image || '🛍️'}</span>
+            <div className="bg-gray-100 aspect-square rounded-lg flex items-center justify-center mb-4 overflow-hidden">
+              {product.image ? (
+                <img 
+                  src={product.image} 
+                  alt={product.name}
+                  className="w-full h-full object-cover"
+                />
+              ) : (
+                <span className="text-9xl text-gray-400">🛍️</span>
+              )}
             </div>
             {product.images && product.images.length > 0 && (
               <div className="grid grid-cols-4 gap-4">
                 {product.images.map((img, idx) => (
                   <button
                     key={idx}
-                    onClick={() => setSelectedImage(idx)}
-                    className={`bg-gray-100 aspect-square rounded-lg flex items-center justify-center text-4xl hover:border-2 hover:border-black transition ${
+                    onClick={() => {
+                      setSelectedImage(idx)
+                      // Update main image when thumbnail is clicked
+                      if (product.images && product.images[idx]) {
+                        setProduct({ ...product, image: product.images[idx] })
+                      }
+                    }}
+                    className={`bg-gray-100 aspect-square rounded-lg flex items-center justify-center overflow-hidden hover:border-2 hover:border-black transition ${
                       selectedImage === idx ? 'border-2 border-black' : ''
                     }`}
                   >
-                    {img}
+                    {img ? (
+                      <img 
+                        src={img} 
+                        alt={`${product.name} ${idx + 1}`}
+                        className="w-full h-full object-cover"
+                      />
+                    ) : (
+                      <span className="text-4xl text-gray-400">📦</span>
+                    )}
                   </button>
                 ))}
               </div>
@@ -455,8 +477,16 @@ export default function ProductDetailPage() {
               {relatedProducts.map((relatedProduct) => (
                 <div key={relatedProduct.id} className="group cursor-pointer border rounded-lg overflow-hidden hover:shadow-lg transition">
                   <Link href={`/product/${relatedProduct.id}`}>
-                    <div className="bg-gray-100 aspect-square flex items-center justify-center group-hover:bg-gray-200 transition">
-                      <span className="text-5xl">{relatedProduct.image || '🛍️'}</span>
+                    <div className="bg-gray-100 aspect-square flex items-center justify-center group-hover:bg-gray-200 transition overflow-hidden">
+                      {relatedProduct.image ? (
+                        <img 
+                          src={relatedProduct.image} 
+                          alt={relatedProduct.name}
+                          className="w-full h-full object-cover"
+                        />
+                      ) : (
+                        <span className="text-5xl text-gray-400">�</span>
+                      )}
                     </div>
                     <div className="p-4">
                       <h3 className="font-semibold text-sm mb-1 line-clamp-2 text-black">{relatedProduct.name}</h3>

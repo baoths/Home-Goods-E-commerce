@@ -169,7 +169,7 @@ export default function HomePage() {
                       <Link href="/orders" className="block px-4 py-2 text-sm text-black hover:bg-gray-100">
                         Đơn hàng của tôi
                       </Link>
-                      {user.role === 'admin' && (
+                      {user.role === 'ADMIN' && (
                         <Link href="/admin" className="block px-4 py-2 text-sm text-black hover:bg-gray-100">
                           Quản trị
                         </Link>
@@ -272,8 +272,16 @@ export default function HomePage() {
           {products.map((product, index) => (
             <div key={product.id} className="product-card group cursor-pointer border rounded-lg overflow-hidden hover:shadow-lg transition">
               <Link href={`/product/${product.id}`}>
-                <div className="bg-gray-100 aspect-square flex items-center justify-center group-hover:bg-gray-200 transition">
-                  <span className="text-5xl">{product.image}</span>
+                <div className="bg-gray-100 aspect-square flex items-center justify-center group-hover:bg-gray-200 transition overflow-hidden">
+                  {product.image ? (
+                    <img 
+                      src={product.image} 
+                      alt={product.name}
+                      className="w-full h-full object-cover"
+                    />
+                  ) : (
+                    <span className="text-5xl text-gray-400">📦</span>
+                  )}
                 </div>
                 <div className="p-4">
                   <h3 className="font-semibold text-sm mb-1 line-clamp-2 text-black">{product.name}</h3>
