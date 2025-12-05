@@ -369,50 +369,26 @@ use_case = CreateProductUseCase(MongoProductRepository())
 
 ## 🚀 Deployment
 
-### Deploy to Vercel
+### Frontend (Vercel)
 
-#### Frontend (Vercel - Recommended)
+```bash
+cd frontend
+vercel
+```
 
-1. **Prepare:**
-   ```bash
-   cd frontend
-   npm install
-   npx prisma generate
-   ```
-
-2. **Deploy to Vercel:**
-   - Push code to GitHub
-   - Import project to Vercel
-   - Set Root Directory: `frontend`
-   - Add Environment Variables:
-     * `DATABASE_URL` - from NeonDB
-     * `JWT_SECRET` - random 32+ characters
-   - Click Deploy
-
-3. **Setup Database:**
-   ```bash
-   # After deploy, push schema
-   npx prisma db push
-   ```
-
-**📖 Full Guide:** [docs/DEPLOYMENT.md](./docs/DEPLOYMENT.md)
-
-#### Backend (Optional - Render/Railway)
+### Backend (Render/Railway)
 
 ```bash
 cd backend
-# Follow platform-specific instructions
+# Deploy theo hướng dẫn của platform
 ```
 
-#### Database (NeonDB - Free)
+### Database (NeonDB)
 
-1. Create account: https://neon.tech
-2. Create new project
-3. Copy `DATABASE_URL`
-4. Add to Vercel environment variables
-5. Run `npx prisma db push`
-
-**Live Demo:** https://your-project.vercel.app
+1. Tạo project tại neon.tech
+2. Copy DATABASE_URL
+3. Update .env files
+4. Run `npx prisma db push`
 
 ## 🧪 Testing
 
@@ -428,10 +404,8 @@ pytest
 
 ## 📚 Documentation
 
-- **Deployment Guide**: [docs/DEPLOYMENT.md](./docs/DEPLOYMENT.md)
-- **Use Cases**: [docs/README.md](./docs/README.md)
-- **Frontend**: [frontend/README.md](./frontend/README.md)
-- **Backend**: [backend/README.md](./backend/README.md)
+- **Frontend**: See `/frontend/README.md`
+- **Backend**: See `/backend/README.md`
 - **API Docs**: http://localhost:8000/docs (when backend running)
 
 ## 🤝 Contributing
