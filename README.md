@@ -8,7 +8,8 @@ Dự án fullstack e-commerce:
 - **Backend**: Python FastAPI với Clean Architecture
 - **Frontend**: Next.js 14 + TypeScript
 - **Database**: PostgreSQL (NeonDB) với Prisma ORM
-- **Features**: Quản lý sản phẩm, đơn hàng, user authentication, upload ảnh (base64)
+- **Features**: Quản lý sản phẩm, đơn hàng, user authentication
+- **Image Processing**: Xử lý ảnh sang base64 hoàn toàn ở frontend (TypeScript)
 
 ## 🚀 Cài đặt
 
@@ -60,7 +61,7 @@ python main.py
 │   │   ├── use_cases.py       # Business logic orchestration
 │   │   └── dto.py             # Data Transfer Objects
 │   ├── infrastructure/        # Infrastructure Layer
-│   │   └── utils/             # Image processing, JWT, password hashing
+│   │   └── utils/             # JWT, password hashing utilities
 │   ├── presentation/          # Presentation Layer (API Routes)
 │   ├── config.py              # Settings & configuration
 │   └── main.py                # FastAPI app entry point
@@ -116,13 +117,13 @@ class CreateProductUseCase:
 
 #### 3. Infrastructure Layer
 - **Repository Implementations**: Implement domain interfaces
-- **External Services**: Database, file storage, APIs
-- **Utils**: Image processing, password hashing, JWT
+- **External Services**: Database, APIs
+- **Utils**: Password hashing, JWT tokens
 
 ```python
-# infrastructure/utils/image_utils.py
-def image_to_base64(image_path: str) -> str:
-    # Convert image to base64 string
+# infrastructure/utils/password_utils.py
+def hash_password(password: str) -> str:
+    # Hash password với bcrypt
 ```
 
 #### 4. Presentation Layer (API)
@@ -233,7 +234,7 @@ use_case = CreateProductUseCase(MongoProductRepository())
 - Quản lý sản phẩm (CRUD)
 - Quản lý danh mục
 - Quản lý banner trang chủ
-- Upload ảnh sản phẩm (convert to base64)
+- Upload ảnh sản phẩm (frontend convert to base64)
 - Quản lý đơn hàng
 
 ### User
@@ -249,7 +250,6 @@ use_case = CreateProductUseCase(MongoProductRepository())
 **Backend:**
 - FastAPI - Web framework
 - Pydantic - Data validation
-- Pillow - Image processing
 - python-jose - JWT authentication
 - bcrypt - Password hashing
 
@@ -258,6 +258,7 @@ use_case = CreateProductUseCase(MongoProductRepository())
 - TypeScript - Type safety
 - Prisma - ORM
 - TailwindCSS - Styling
+- Canvas API - Image processing & base64 conversion
 
 ## 📄 License
 
