@@ -1,93 +1,28 @@
-# 🏠 Hệ thống Bán Đồ Gia Dụng
+# 🏠 Home Goods E-commerce
 
-## 📋 Tổng Quan
-Dự án fullstack bán hàng đồ gia dụng online với:
+Website bán đồ gia dụng online với Clean Architecture và SOLID principles.
+
+## 📋 Giới thiệu
+
+Dự án fullstack e-commerce:
 - **Backend**: Python FastAPI với Clean Architecture
-- **Frontend**: Next.js 14+ với TypeScript
-- **Database**: NeonDB (PostgreSQL)
-- **ORM**: Prisma
+- **Frontend**: Next.js 14 + TypeScript
+- **Database**: PostgreSQL (NeonDB) với Prisma ORM
+- **Features**: Quản lý sản phẩm, đơn hàng, user authentication, upload ảnh (base64)
 
-## 📚 Documentation
+## 🚀 Cài đặt
 
-### 📂 Tất cả Documentation
-📑 **[docs/INDEX.md](docs/INDEX.md)** - Mục lục đầy đủ tất cả tài liệu
+### Frontend
 
-### 🚀 Getting Started
-| Document | Description | Time |
-|----------|-------------|------|
-| [GETTING_STARTED.md](GETTING_STARTED.md) | **START HERE** - 3 bước cơ bản | 2 min |
-| [QUICK_START.md](QUICK_START.md) | Chạy nhanh project | 5 min |
-| [SETUP_GUIDE.md](SETUP_GUIDE.md) | Hướng dẫn setup chi tiết | 10 min |
-
-### 🔧 Frontend Documentation
-| Document | Description |
-|----------|-------------|
-| [docs/frontend/INDEX.md](docs/frontend/INDEX.md) | 📘 Mục lục Frontend |
-| [docs/frontend/FIX-ERRORS.md](docs/frontend/FIX-ERRORS.md) | ⚡ **SỬA LỖI NHANH** (3 bước) |
-| [docs/frontend/ERRORS_EXPLAINED.md](docs/frontend/ERRORS_EXPLAINED.md) | 📝 Giải thích lỗi TypeScript |
-| [docs/frontend/TROUBLESHOOTING.md](docs/frontend/TROUBLESHOOTING.md) | 🔍 Troubleshooting chi tiết |
-
-### 🏗️ Backend Documentation
-| Document | Description |
-|----------|-------------|
-| [docs/backend/INDEX.md](docs/backend/INDEX.md) | 📗 Mục lục Backend |
-| [docs/backend/ARCHITECTURE.md](docs/backend/ARCHITECTURE.md) | 🏛️ Clean Architecture chi tiết |
-| [docs/backend/CLEAN_ARCHITECTURE_EXPLAINED.md](docs/backend/CLEAN_ARCHITECTURE_EXPLAINED.md) | 📚 Giải thích cho người mới |
-
-### 📖 General Documentation
-| Document | Description |
-|----------|-------------|
-| [PROJECT_SUMMARY.md](PROJECT_SUMMARY.md) | Tổng kết features, stats, tech stack |
-| [DEPLOYMENT.md](DEPLOYMENT.md) | Hướng dẫn deploy production |
-| [CHECKLIST.md](CHECKLIST.md) | ✅ Developer checklist |
-
-**👉 Lần đầu? Bắt đầu tại [GETTING_STARTED.md](GETTING_STARTED.md)**  
-**⚠️ Thấy lỗi frontend? Xem [docs/frontend/FIX-ERRORS.md](docs/frontend/FIX-ERRORS.md)**  
-**📚 Xem toàn bộ docs? [docs/INDEX.md](docs/INDEX.md)**
-
-## 🏗️ Kiến Trúc
-
-### Backend Architecture (Clean Architecture + SOLID)
-```
-backend/
-├── domain/              # Entities & Business Rules (SOLID: SRP, OCP)
-│   ├── entities/       # Domain models
-│   ├── repositories/   # Repository interfaces (DIP)
-│   └── services/       # Domain services
-├── application/         # Use Cases (SRP)
-│   ├── use_cases/      # Business logic
-│   └── dto/            # Data Transfer Objects
-├── infrastructure/      # External services (DIP)
-│   ├── database/       # Prisma connection
-│   ├── repositories/   # Repository implementations
-│   └── utils/          # Helpers (image conversion, etc.)
-└── presentation/        # API Layer (ISP)
-    ├── api/            # FastAPI routes
-    └── schemas/        # Request/Response models
+```bash
+cd frontend
+pnpm i
 ```
 
-### Frontend Architecture
-```
-frontend/
-├── app/                # Next.js App Router
-│   ├── (admin)/       # Admin pages
-│   └── (user)/        # User pages
-├── components/         # Reusable components
-├── lib/               # Utilities
-│   ├── prisma.ts      # Prisma client
-│   └── image.ts       # Image utilities
-└── prisma/
-    └── schema.prisma  # Database schema
-```
+> Script `postinstall` sẽ tự động chạy `prisma generate`
 
-## 🚀 Cài Đặt
+### Backend
 
-### Prerequisites
-- Python 3.10+
-- Node.js 18+
-- NeonDB account
-
-### Backend Setup
 ```bash
 cd backend
 python -m venv venv
@@ -95,102 +30,235 @@ venv\Scripts\activate  # Windows
 pip install -r requirements.txt
 ```
 
-### Frontend Setup
+## ▶️ Chạy ứng dụng
+
+### Frontend
 ```bash
 cd frontend
-npm install
-npx prisma generate
-npx prisma db push
-npx prisma db seed
+pnpm dev
 ```
+→ http://localhost:3000
 
-### Environment Variables
-
-**backend/.env**
-```env
-DATABASE_URL="postgresql://..."
-SECRET_KEY="your-secret-key"
-ALGORITHM="HS256"
-ACCESS_TOKEN_EXPIRE_MINUTES=30
-```
-
-**frontend/.env**
-```env
-DATABASE_URL="postgresql://..."
-NEXTAUTH_SECRET="your-nextauth-secret"
-NEXTAUTH_URL="http://localhost:3000"
-```
-
-## 🏃 Chạy Ứng Dụng
-
-### Development
+### Backend
 ```bash
-# Terminal 1 - Backend
 cd backend
-uvicorn main:app --reload --port 8000
+venv\Scripts\activate
+python main.py
+```
+→ http://localhost:8000  
+→ http://localhost:8000/docs (API Documentation)
 
-# Terminal 2 - Frontend
-cd frontend
-npm run dev
+## 📁 Cấu trúc dự án
+
+```
+.
+├── backend/                    # Python FastAPI Backend
+│   ├── domain/                # Domain Layer (Entities & Business Rules)
+│   │   ├── entities.py        # Core business entities
+│   │   └── repositories.py    # Repository interfaces (DIP)
+│   ├── application/           # Application Layer (Use Cases)
+│   │   ├── use_cases.py       # Business logic orchestration
+│   │   └── dto.py             # Data Transfer Objects
+│   ├── infrastructure/        # Infrastructure Layer
+│   │   └── utils/             # Image processing, JWT, password hashing
+│   ├── presentation/          # Presentation Layer (API Routes)
+│   ├── config.py              # Settings & configuration
+│   └── main.py                # FastAPI app entry point
+│
+└── frontend/                  # Next.js Frontend
+    ├── app/                   # Next.js App Router
+    │   ├── admin/            # Admin pages
+    │   ├── profile/          # User profile
+    │   ├── layout.tsx        # Root layout
+    │   └── page.tsx          # Homepage
+    ├── lib/                   # Utilities
+    │   ├── prisma.ts         # Prisma client singleton
+    │   └── image.ts          # Image processing utilities
+    ├── prisma/
+    │   ├── schema.prisma     # Database schema
+    │   └── seed.ts           # Mock data seeder
+    └── components/            # Reusable React components
 ```
 
-### URLs
-- Frontend: http://localhost:3000
-- Backend API: http://localhost:8000
-- API Docs: http://localhost:8000/docs
+## 🏗️ Clean Architecture
 
-## 📊 Database Schema
+### 4 Layers
 
-### Tables
-- **User**: Thông tin người dùng (admin/customer)
-- **Category**: Danh mục sản phẩm
-- **Product**: Sản phẩm đồ gia dụng
-- **Banner**: Banner trang chủ
-- **Order**: Đơn hàng
-- **OrderItem**: Chi tiết đơn hàng
+#### 1. Domain Layer (Core)
+- **Entities**: Business objects với business logic
+- **Repository Interfaces**: Contracts cho data access (DIP)
+- **Độc lập**: Không phụ thuộc vào layer khác
 
-## 🎯 Features
+```python
+# domain/entities.py
+class Product:
+    def get_final_price(self) -> float:
+        if self.discount_percent > 0:
+            return self.price * (1 - self.discount_percent / 100)
+        return self.price
+```
+
+#### 2. Application Layer (Use Cases)
+- **Use Cases**: Orchestrate business logic
+- **DTOs**: Data transfer between layers
+- **SRP**: Mỗi use case làm 1 việc
+
+```python
+# application/use_cases.py
+class CreateProductUseCase:
+    def __init__(self, product_repo: IProductRepository):
+        self.product_repo = product_repo  # Dependency Injection
+    
+    def execute(self, product_data: CreateProductDTO) -> Product:
+        # Business logic here
+        return self.product_repo.create(product)
+```
+
+#### 3. Infrastructure Layer
+- **Repository Implementations**: Implement domain interfaces
+- **External Services**: Database, file storage, APIs
+- **Utils**: Image processing, password hashing, JWT
+
+```python
+# infrastructure/utils/image_utils.py
+def image_to_base64(image_path: str) -> str:
+    # Convert image to base64 string
+```
+
+#### 4. Presentation Layer (API)
+- **FastAPI Routes**: HTTP endpoints
+- **Request/Response Models**: Pydantic schemas
+- **Dependency Injection**: Inject use cases
+
+```python
+# presentation/api/routes/products.py
+@router.post("/products")
+async def create_product(
+    data: CreateProductRequest,
+    use_case: CreateProductUseCase = Depends()
+):
+    return use_case.execute(data)
+```
+
+### Flow của request
+```
+HTTP Request 
+  → Presentation Layer (validate input)
+  → Application Layer (use case logic) 
+  → Domain Layer (business rules)
+  → Infrastructure Layer (database)
+  → Response back through layers
+```
+
+## 🎯 SOLID Principles
+
+### S - Single Responsibility Principle
+Mỗi class chỉ có 1 lý do để thay đổi.
+
+```python
+# ✅ Good: Mỗi use case làm 1 việc
+class RegisterUserUseCase:
+    def execute(self, data): ...
+
+class LoginUserUseCase:
+    def execute(self, credentials): ...
+```
+
+### O - Open/Closed Principle
+Mở cho mở rộng, đóng cho sửa đổi.
+
+```python
+# ✅ Good: Extend bằng inheritance
+class Entity:
+    def __init__(self, id, created_at, updated_at):
+        self.id = id
+        self.created_at = created_at
+        self.updated_at = updated_at
+
+class Product(Entity):  # Extend, không modify Entity
+    def __init__(self, id, name, price, ...):
+        super().__init__(id, created_at, updated_at)
+        self.name = name
+```
+
+### L - Liskov Substitution Principle
+Subclass có thể thay thế base class mà không làm hỏng chương trình.
+
+```python
+# ✅ Good: Repository implementations thay thế được interface
+class IProductRepository(ABC):
+    @abstractmethod
+    def find_by_id(self, id: str) -> Product: ...
+
+class PrismaProductRepository(IProductRepository):
+    def find_by_id(self, id: str) -> Product:
+        # Implementation with Prisma
+```
+
+### I - Interface Segregation Principle
+Client không nên phụ thuộc vào interface mà nó không dùng.
+
+```python
+# ✅ Good: Chia nhỏ interfaces
+class IProductRepository(ABC):  # Chỉ product operations
+    def create(self, product): ...
+    def find_by_id(self, id): ...
+
+class IUserRepository(ABC):    # Riêng user operations
+    def create(self, user): ...
+    def find_by_email(self, email): ...
+```
+
+### D - Dependency Inversion Principle
+Phụ thuộc vào abstraction, không phụ thuộc vào concrete implementation.
+
+```python
+# ✅ Good: Use case phụ thuộc vào interface
+class CreateProductUseCase:
+    def __init__(self, product_repo: IProductRepository):  # Interface
+        self.product_repo = product_repo
+    
+    def execute(self, data):
+        return self.product_repo.create(data)
+
+# Có thể swap implementation
+use_case = CreateProductUseCase(PrismaProductRepository())
+# hoặc
+use_case = CreateProductUseCase(MongoProductRepository())
+```
+
+## 🎨 Features
 
 ### Admin
-- ✅ Quản lý sản phẩm (CRUD)
-- ✅ Quản lý danh mục
-- ✅ Quản lý banner trang chủ
-- ✅ Upload ảnh (convert to base64)
-- ✅ Quản lý đơn hàng
-- ✅ Đổi avatar
+- Quản lý sản phẩm (CRUD)
+- Quản lý danh mục
+- Quản lý banner trang chủ
+- Upload ảnh sản phẩm (convert to base64)
+- Quản lý đơn hàng
 
 ### User
-- ✅ Xem sản phẩm theo danh mục
-- ✅ Tìm kiếm sản phẩm
-- ✅ Giỏ hàng
-- ✅ Đặt hàng
-- ✅ Đổi avatar
-- ✅ Lịch sử mua hàng
+- Xem sản phẩm theo danh mục
+- Tìm kiếm sản phẩm
+- Giỏ hàng
+- Đặt hàng
+- Đổi avatar
+- Lịch sử đơn hàng
 
 ## 🔧 Tech Stack
 
-### Backend
-- FastAPI
-- SQLAlchemy (via Prisma)
-- Pydantic
-- python-jose (JWT)
-- passlib (password hashing)
-- Pillow (image processing)
+**Backend:**
+- FastAPI - Web framework
+- Pydantic - Data validation
+- Pillow - Image processing
+- python-jose - JWT authentication
+- bcrypt - Password hashing
 
-### Frontend
-- Next.js 14
-- TypeScript
-- Prisma Client
-- TailwindCSS
-- Shadcn/ui
-
-## 📝 SOLID Principles Applied
-
-1. **Single Responsibility**: Mỗi use case chỉ làm 1 việc
-2. **Open/Closed**: Entities mở rộng qua inheritance
-3. **Liskov Substitution**: Repository interfaces
-4. **Interface Segregation**: Specific repository interfaces
-5. **Dependency Inversion**: Dependencies injected via constructors
+**Frontend:**
+- Next.js 14 - React framework
+- TypeScript - Type safety
+- Prisma - ORM
+- TailwindCSS - Styling
 
 ## 📄 License
+
 MIT

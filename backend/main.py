@@ -50,4 +50,13 @@ async def health_check():
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    
+    # Chạy server với auto-reload cho development
+    uvicorn.run(
+        "main:app",  # Application import string
+        host="0.0.0.0",
+        port=8000,
+        reload=True,  # Auto-reload khi code thay đổi
+        log_level="info"
+    )
+
