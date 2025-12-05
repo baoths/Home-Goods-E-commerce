@@ -8,8 +8,6 @@ Dự án fullstack e-commerce:
 - **Backend**: Python FastAPI với Clean Architecture
 - **Frontend**: Next.js 14 + TypeScript
 - **Database**: PostgreSQL (NeonDB) với Prisma ORM
-- **Features**: Quản lý sản phẩm, đơn hàng, user authentication
-- **Image Processing**: Xử lý ảnh sang base64 hoàn toàn ở frontend (TypeScript)
 
 ## 🚀 Cài đặt
 
