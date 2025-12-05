@@ -86,23 +86,26 @@ export default function ProfilePage() {
     setSuccess('')
 
     try {
-      const updateData = {
-        ...formData,
-        avatar: avatar, // Base64 encoded avatar
-      }
-
-      // TODO: Call API to update profile
-      console.log('Update profile:', updateData)
+      // Call API to update profile
+      const response = await authApi.updateProfile({
+        name: formData.name,
+        phone: formData.phone,
+        address: formData.address,
+        avatar: avatar
+      })
       
-      setSuccess('Cập nhật thông tin thành công!')
+      setSuccess(response.message || 'Cập nhật thông tin thành công!')
       
-      // Update stored user data
-      const updatedUser = { ...user, ...updateData }
-      localStorage.setItem('user', JSON.stringify(updatedUser))
-      setUser(updatedUser)
+      // Update local user state
+      setUser(response.user)
       
-    } catch (err) {
-      setError('Cập nhật thông tin thất bại')
+      // Reload page after 1 second to update header
+      setTimeout(() => {
+        window.location.reload()
+      }, 1000)
+      
+    } catch (err: any) {
+      setError(err.message || 'Cập nhật thông tin thất bại')
     } finally {
       setLoading(false)
     }
