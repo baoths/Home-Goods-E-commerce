@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Home Goods E-commerce{% endblock %}</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+</head>
+<body class="bg-gray-50 flex flex-col min-h-screen font-sans">
+    
+    <header class="sticky top-0 z-50">
+        {% include 'components/topbar.html' %}
+    </header>
+
+    <main class="flex-grow">
+        <div class="max-w-7xl mx-auto py-12 sm:px-6 lg:px-8">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    <div class="rounded-md bg-green-50 p-4 mb-8">
+                        <div class="flex">
+                            <div class="flex-shrink-0">
+                                <svg class="h-5 w-5 text-green-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                                </svg>
+                            </div>
+                            <div class="ml-3">
+                                <ul class="list-disc pl-5 space-y-1">
+                                {% for category, message in messages %}
+                                    <li class="text-sm font-medium {{ 'text-green-800' if category == 'success' else 'text-red-800' }}">{{ message }}</li>
+                                {% endfor %}
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+            {% endwith %}
+            {% block content %}{% endblock %}
+        </div>
+    </main>
+
+    {% include 'components/footer.html' %}
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const categoriesButton = document.getElementById('categories-menu-button');
+            const categoriesMenu = document.getElementById('categories-menu');
+
+            if (categoriesButton) {
+                categoriesButton.addEventListener('click', function() {
+                    categoriesMenu.classList.toggle('hidden');
+                });
+
+                document.addEventListener('click', function(event) {
+                    if (!categoriesButton.contains(event.target) && !categoriesMenu.contains(event.target)) {
+                        categoriesMenu.classList.add('hidden');
+                    }
+                });
+            }
+        });
+    </script>
+
+</body>
+</html>

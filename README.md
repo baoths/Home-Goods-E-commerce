@@ -1,315 +1,162 @@
-# Home Goods E-commerce# 🏠 Home Goods E-commerce
+# 🏠 Home Goods E-commerce
 
+> **100% Vibe Coded** ✨  
+> *Copilot Models: Gemini Pro 2.5, Claude Opus 4.5*
+> *Prompted by: baoths*
+---
 
+## �️ Tech Stack
 
-This is a full-stack e-commerce web application for home goods, built with Next.js, TypeScript, and Prisma.Website bán đồ gia dụng online với Clean Architecture và SOLID principles.
+| Backend | Frontend | Database |
+|---------|----------|----------|
+| Next.js 14 | Flask | PostgreSQL |
+| Prisma ORM | Jinja2 | NeonDB |
+| JWT Auth | Alpine.js | |
+| | Tailwind CSS | |
+| | Cropper.js | |
 
+## 📐 Design Patterns & Principles
 
+- **MVC Pattern** - Model-View-Controller architecture
+- **Repository Pattern** - Data access abstraction via Prisma
+- **Decorator Pattern** - Route protection (`@admin_required`)
+- **Proxy Pattern** - API proxy for frontend-backend communication
+- **DRY** - Don't Repeat Yourself
+- **SOLID** - Single responsibility in services/controllers
 
-## ✨ Features## 📋 Giới thiệu
+---
 
+## � About
 
+A full-stack e-commerce platform for home goods featuring product management, user authentication, and an admin dashboard with image cropping capabilities.
 
-- User authentication (Register, Login)Dự án fullstack e-commerce:
+---
 
-- Product browsing by category- **Frontend**: Next.js 14 + TypeScript + TailwindCSS
-
-- Product search- **Backend**: Python FastAPI với Clean Architecture (Optional)
-
-- Shopping cart- **Database**: PostgreSQL (NeonDB) với Prisma ORM
-
-- User profile management- **Authentication**: JWT-based auth
-
-- Admin dashboard for managing products, categories, and users- **State Management**: React Hooks + localStorage
-
-
-
-## 🚀 Technologies Used## ✨ Tính năng
-
-
-
-- **Framework**: [Next.js](https://nextjs.org/)### 🛍️ Người dùng
-
-- **Language**: [TypeScript](https://www.typescriptlang.org/)- ✅ Đăng ký/Đăng nhập với JWT authentication
-
-- **Styling**: [Tailwind CSS](https://tailwindcss.com/)- ✅ Xem danh sách sản phẩm với pagination & filters
-
-- **ORM**: [Prisma](https://www.prisma.io/)- ✅ Tìm kiếm sản phẩm
-
-- **Database**: [PostgreSQL](https://www.postgresql.org/) (or any other Prisma-supported database)- ✅ Xem chi tiết sản phẩm với gallery hình ảnh
-
-- ✅ Lọc sản phẩm theo category
-
-## 📦 Getting Started- ✅ Sắp xếp sản phẩm (mới nhất, giá, tên)
-
-- ✅ Cập nhật profile với avatar upload (Base64)
-
-Follow these instructions to get a copy of the project up and running on your local machine for development and testing purposes.- ✅ Responsive design
-
-
-
-### Prerequisites### 👨‍💼 Admin
-
-- ✅ Dashboard thống kê (sản phẩm, categories, users, orders)
-
-- [Node.js](https://nodejs.org/en/) (v18 or later recommended)- ✅ Quản lý sản phẩm (CRUD)
-
-- [pnpm](https://pnpm.io/installation) (or npm/yarn)  - Thêm/sửa/xóa sản phẩm
-
-- A running PostgreSQL database instance.  - Upload hình ảnh (single + multiple images)
-
-  - Quản lý stock, giá, discount
-
-### Installation & Setup- ✅ Quản lý categories (CRUD)
-
-- ✅ Quản lý users (view, edit, delete)
-
-1.  **Clone the repository:**- ✅ Role-based access control
-
-    ```bash
-
-    git clone https://github.com/baoths/Home-Goods-E-commerce.git## 🚀 Quick Start
-
-    cd Home-Goods-E-commerce/frontend
-
-    ```### 1. Clone Repository
-
-
-
-2.  **Install dependencies:**```bash
-
-    ```bashgit clone <repository-url>
-
-    pnpm installcd Home-Goods-E-commerce
-
-    ``````
-
-
-
-3.  **Set up environment variables:**### 2. Setup Frontend
-
-
-
-    Create a `.env` file in the `frontend` directory by copying the example file:```bash
-
-    ```bashcd frontend
-
-    cp .env.example .envnpm install
-
-    ```# hoặc
-
-pnpm install
-
-    Open the `.env` file and update the `DATABASE_URL` with your PostgreSQL connection string. It should look something like this:```
-
-    ```
-
-    DATABASE_URL="postgresql://USER:PASSWORD@HOST:PORT/DATABASE?schema=public"**Cấu hình database:**
-
-    ```1. Copy `.env.example` thành `.env`
-
-2. Cập nhật `DATABASE_URL` và `JWT_SECRET`
-
-4.  **Apply database migrations:**
+## 🚀 Quick Start
 
 ```bash
+# Clone
+git clone https://github.com/baoths/Home-Goods-E-commerce.git
+cd Home-Goods-E-commerce
 
-    This command will apply the database schema defined in `prisma/schema.prisma` to your database.npx prisma generate
-
-    ```bashnpx prisma db push
-
-    pnpm prisma db pushnpm run dev
-
-    ``````
-
-
-
-5.  **(Optional) Seed the database with initial data:**→ Frontend: http://localhost:3000
-
-
-
-    If you want to populate your database with some sample data, run:### 3. Setup Backend (Optional)
-
-    ```bash
-
-    pnpm prisma db seedBackend Python là optional vì frontend đã có API routes riêng. Nếu muốn sử dụng:
-
-    ```
-
-**Windows:**
-
-### Running the Development Server```bash
-
+# Backend
 cd backend
+pnpm install && pnpm prisma generate && pnpm prisma db push
 
-Once the setup is complete, you can start the development server:setup.bat
-
-start.bat
-
-```bash```
-
-pnpm dev
-
-```**macOS/Linux:**
-
-```bash
-
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.cd backend
-
-chmod +x setup.sh start.sh
-./setup.sh
-./start.sh
-```
-
-→ Backend API: http://localhost:8000  
-→ API Docs: http://localhost:8000/docs
-
-
-
-
-
-## 🗄️ Database Schema
-
-### Tables
-
-- **User**: Người dùng (customers & admins)
-- **Category**: Danh mục sản phẩm
-- **Product**: Sản phẩm với images (Base64)
-- **Order**: Đơn hàng
-- **OrderItem**: Chi tiết đơn hàng
-
-### Key Features
-
-- ✅ PostgreSQL với Prisma ORM
-- ✅ UUID primary keys
-- ✅ Timestamps (createdAt, updatedAt)
-- ✅ Foreign key relationships
-- ✅ Base64 image storage
-- ✅ Indexes trên slug và email
-
-## 🔐 Authentication
-
-- **JWT-based authentication**
-- Token expiration: 30 minutes
-- Roles: ADMIN, CUSTOMER
-- Protected routes với middleware
-- Password hashing với bcrypt
-
-## 🎨 UI/UX Features
-
-### Responsive Design
-- Mobile-first approach
-- Breakpoints: sm, md, lg, xl
-- Touch-friendly buttons
-- Optimized images
-
-### Image Handling
-- Base64 encoding/decoding
-- Image compression (800px max width)
-- Multiple image support
-- Gallery view với thumbnails
-- Avatar upload với preview
-
-### User Experience
-- Loading states
-- Error handling
-- Form validation
-- Toast notifications
-- Smooth transitions
-- Hover effects
-
-## 🔧 Tech Stack
-
-
-- **Framework**: Next.js 14 (App Router)
-- **Language**: TypeScript
-- **Styling**: TailwindCSS
-- **Database**: Prisma ORM
-- **Auth**: JWT (jsonwebtoken)
-- **Image**: Canvas API (Base64 conversion)
-- **HTTP**: Fetch API
-
-
-## 📝 API Endpoints
-
-### Frontend API Routes (Next.js)
-
-**Auth:**
-- `POST /api/auth/register` - Đăng ký
-- `POST /api/auth/login` - Đăng nhập
-- `GET /api/auth/me` - Current user
-- `PUT /api/auth/me` - Update profile
-
-**Products:**
-- `GET /api/products` - List products
-- `GET /api/products/[id]` - Product detail
-- `POST /api/products` - Create (Admin)
-- `PUT /api/products/[id]` - Update (Admin)
-- `DELETE /api/products/[id]` - Delete (Admin)
-
-**Categories:**
-- `GET /api/categories` - List categories
-- `GET /api/categories/[id]` - Category detail
-- `POST /api/categories` - Create (Admin)
-- `PUT /api/categories/[id]` - Update (Admin)
-- `DELETE /api/categories/[id]` - Delete (Admin)
-
-**Users:**
-- `GET /api/users` - List users (Admin)
-- `GET /api/users/[id]` - User detail (Admin)
-- `PUT /api/users/[id]` - Update user (Admin)
-- `DELETE /api/users/[id]` - Delete user (Admin)
-
-**Admin:**
-- `GET /api/admin/statistics` - Dashboard stats
-
-
-
-### Database (NeonDB)
-
-1. Tạo project tại neon.tech
-2. Copy DATABASE_URL
-3. Update .env files
-4. Run `npx prisma db push`
-
-## 🧪 Testing
-
-```bash
 # Frontend
-cd frontend
-npm test
+cd ../frontend_python
+pip install -r requirements.txt
 
-# Backend  
-cd backend
-pytest
+# Run (2 terminals)
+# Terminal 1: cd backend && pnpm dev
+# Terminal 2: cd frontend_python && python app.py
 ```
 
-## 📚 Documentation
+**URLs:** Frontend → http://localhost:5001 | API → http://localhost:3000
 
-- See `/frontend/README.md`
-- **API Docs**: http://localhost:8000/docs (when backend running)
+---
+
+## ✨ Features
+
+- [x] 🔐 User authentication (Login/Register)
+- [x] 👤 User profile with avatar upload
+- [x] 📦 Product browsing & detail pages
+- [x] 🏷️ Category filtering
+- [x] 🖼️ Banner management
+- [x] 🔍 Product search
+- [x] 👨‍💼 Admin dashboard
+- [x] ✏️ CRUD Products (with image cropper)
+- [x] ✏️ CRUD Categories (with image cropper)
+- [x] ✏️ CRUD Banners (with image cropper)
+- [x] ✏️ User management
+- [ ] 🛒 Shopping cart
+- [ ] 📋 Order management
+
+---
+
+## 📁 Project Structure
+
+```
+Home-Goods-E-commerce/
+├── .env.example
+├── README.md
+├── backend/
+│   ├── app/
+│   │   └── api/
+│   │       ├── auth/
+│   │       ├── products/
+│   │       ├── categories/
+│   │       ├── banners/
+│   │       └── users/
+│   ├── modules/
+│   │   ├── auth/
+│   │   ├── products/
+│   │   ├── categories/
+│   │   ├── banners/
+│   │   └── users/
+│   ├── prisma/
+│   │   ├── schema.prisma
+│   │   └── seed.ts
+│   └── package.json
+└── frontend_python/
+    ├── app.py
+    ├── requirements.txt
+    └── templates/
+        ├── layout.html
+        ├── index.html
+        ├── login.html
+        ├── register.html
+        ├── profile.html
+        ├── category.html
+        ├── product_detail.html
+        ├── admin.html
+        ├── admin_products.html
+        ├── admin_categories.html
+        ├── admin_banners.html
+        └── admin_users.html
+```
+
+---
+
+## � API Endpoints
+
+### Public
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/api/products` | List products |
+| GET | `/api/products/:id` | Get product detail |
+| GET | `/api/categories` | List categories |
+| GET | `/api/banners` | List active banners |
+| POST | `/api/auth/login` | User login |
+| POST | `/api/auth/register` | User registration |
+
+### Protected
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/api/auth/me` | Get current user |
+| PUT | `/api/auth/update-profile` | Update profile |
+
+### Admin Only
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| POST/PUT/DELETE | `/api/products/:id` | Manage products |
+| POST/PUT/DELETE | `/api/categories/:id` | Manage categories |
+| POST/PUT/DELETE | `/api/banners/:id` | Manage banners |
+| GET/PUT/DELETE | `/api/users/:id` | Manage users |
+
+---
 
 ## 🤝 Contributing
 
-1. Fork repository
-2. Create feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to branch (`git push origin feature/AmazingFeature`)
-5. Open Pull Request
+1. Fork it
+2. Create your branch (`git checkout -b feature/cool-feature`)
+3. Commit (`git commit -m 'Add cool feature'`)
+4. Push (`git push origin feature/cool-feature`)
+5. Open a PR
+
+---
 
 ## 📄 License
 
-MIT License - see LICENSE file for details
+MIT License - see [LICENSE](LICENSE)
 
-## 👥 Authors
-
-- Backend Architecture: Clean Architecture + SOLID principles
-- Frontend: Next.js 14 + TypeScript
-- Database: PostgreSQL with Prisma
-
-## 🙏 Acknowledgments
-
-- FastAPI documentation
-- Next.js documentation
-- Clean Architecture by Robert C. Martin
-- SOLID principles

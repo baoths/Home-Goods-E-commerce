@@ -1,0 +1,397 @@
+{% extends "layout.html" %}
+
+{% block title %}Edit Profile - Home Goods{% endblock %}
+
+{% block content %}
+<!-- Cropper.js CSS -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.css">
+
+<div class="bg-gray-100 min-h-screen">
+    <div class="max-w-2xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
+        <div class="bg-white rounded-2xl shadow-xl overflow-hidden">
+            <!-- Header -->
+            <div class="bg-gradient-to-r from-indigo-600 to-purple-600 px-8 py-6">
+                <h1 class="text-2xl font-bold text-white">Edit Profile</h1>
+                <p class="text-indigo-100 mt-1">Update your personal information</p>
+            </div>
+            
+            <!-- Form -->
+            <form method="POST" action="{{ url_for('edit_profile') }}" class="p-8 space-y-6" id="editProfileForm">
+                <!-- Avatar Upload -->
+                <div class="flex flex-col items-center mb-6">
+                    <div class="relative group">
+                        <!-- Avatar Preview -->
+                        <div id="avatarPreview" class="w-28 h-28 rounded-full overflow-hidden bg-indigo-600 flex items-center justify-center text-white font-bold text-3xl uppercase shadow-lg cursor-pointer border-4 border-white ring-4 ring-indigo-100">
+                            {% if user_avatar %}
+                                <img src="{{ user_avatar }}" alt="Avatar" class="w-full h-full object-cover" id="avatarImage">
+                            {% else %}
+                                <span id="avatarInitial">{{ session.current_user.get('name', 'U')[0] }}</span>
+                            {% endif %}
+                        </div>
+                        
+                        <!-- Upload Overlay -->
+                        <label for="avatarInput" class="absolute inset-0 w-28 h-28 rounded-full bg-black bg-opacity-50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer">
+                            <svg class="w-8 h-8 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
+                            </svg>
+                        </label>
+                        
+                        <input type="file" id="avatarInput" name="avatar_file" accept="image/*" class="hidden">
+                    </div>
+                    <p class="mt-2 text-sm text-gray-500">Click to upload new avatar</p>
+                    <p class="text-xs text-gray-400">JPG, PNG, GIF up to 2MB</p>
+                    
+                    <!-- Hidden input for base64 avatar -->
+                    <input type="hidden" name="avatar_base64" id="avatarBase64">
+                </div>
+                
+                <!-- Name -->
+                <div>
+                    <label for="name" class="block text-sm font-medium text-gray-700 mb-2">
+                        Full Name
+                    </label>
+                    <input type="text" 
+                           id="name" 
+                           name="name" 
+                           value="{{ session.current_user.get('name', '') }}"
+                           required
+                           minlength="3"
+                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors"
+                           placeholder="Enter your full name">
+                </div>
+                
+                <!-- Email (Read-only) -->
+                <div>
+                    <label for="email" class="block text-sm font-medium text-gray-700 mb-2">
+                        Email Address
+                    </label>
+                    <input type="email" 
+                           id="email" 
+                           value="{{ session.current_user.get('email', '') }}"
+                           disabled
+                           class="w-full px-4 py-3 border border-gray-200 rounded-lg bg-gray-50 text-gray-500 cursor-not-allowed">
+                    <p class="mt-1 text-xs text-gray-500">Email cannot be changed</p>
+                </div>
+                
+                <!-- Phone -->
+                <div>
+                    <label for="phone" class="block text-sm font-medium text-gray-700 mb-2">
+                        Phone Number
+                    </label>
+                    <input type="tel" 
+                           id="phone" 
+                           name="phone" 
+                           value="{{ session.current_user.get('phone', '') or '' }}"
+                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors"
+                           placeholder="Enter your phone number">
+                </div>
+                
+                <!-- Address -->
+                <div>
+                    <label for="address" class="block text-sm font-medium text-gray-700 mb-2">
+                        Address
+                    </label>
+                    <textarea id="address" 
+                              name="address" 
+                              rows="3"
+                              class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors resize-none"
+                              placeholder="Enter your address">{{ session.current_user.get('address', '') or '' }}</textarea>
+                </div>
+                
+                <!-- Buttons -->
+                <div class="flex items-center justify-between pt-4 border-t border-gray-200">
+                    <a href="{{ url_for('profile') }}" 
+                       class="px-6 py-3 text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors font-medium">
+                        Cancel
+                    </a>
+                    <button type="submit" 
+                            class="px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors font-medium flex items-center">
+                        <svg class="w-5 h-5 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                        </svg>
+                        Save Changes
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Image Crop Modal -->
+<div id="cropModal" class="fixed inset-0 z-50 hidden">
+    <!-- Backdrop -->
+    <div class="absolute inset-0 bg-black bg-opacity-75"></div>
+    
+    <!-- Modal Content -->
+    <div class="absolute inset-0 flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-2xl max-w-lg w-full max-h-[90vh] overflow-hidden">
+            <!-- Modal Header -->
+            <div class="px-6 py-4 border-b border-gray-200 flex items-center justify-between">
+                <h3 class="text-lg font-semibold text-gray-800">Crop Your Avatar</h3>
+                <button type="button" id="closeCropModal" class="text-gray-400 hover:text-gray-600 transition-colors">
+                    <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+            
+            <!-- Crop Area -->
+            <div class="p-6">
+                <div class="relative w-full h-64 bg-gray-100 rounded-lg overflow-hidden">
+                    <img id="cropImage" src="" alt="Crop preview" class="max-w-full">
+                </div>
+                
+                <!-- Crop Controls -->
+                <div class="mt-4 flex items-center justify-center space-x-4">
+                    <button type="button" id="zoomOut" class="p-2 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors" title="Zoom Out">
+                        <svg class="w-5 h-5 text-gray-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM13 10H7" />
+                        </svg>
+                    </button>
+                    <button type="button" id="zoomIn" class="p-2 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors" title="Zoom In">
+                        <svg class="w-5 h-5 text-gray-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v6m3-3H7" />
+                        </svg>
+                    </button>
+                    <button type="button" id="rotateLeft" class="p-2 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors" title="Rotate Left">
+                        <svg class="w-5 h-5 text-gray-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6" />
+                        </svg>
+                    </button>
+                    <button type="button" id="rotateRight" class="p-2 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors" title="Rotate Right">
+                        <svg class="w-5 h-5 text-gray-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 10h-10a8 8 0 00-8 8v2M21 10l-6 6m6-6l-6-6" />
+                        </svg>
+                    </button>
+                    <button type="button" id="resetCrop" class="p-2 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors" title="Reset">
+                        <svg class="w-5 h-5 text-gray-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                        </svg>
+                    </button>
+                </div>
+                
+                <p class="mt-3 text-center text-sm text-gray-500">
+                    Drag to reposition • Scroll to zoom • Use controls to adjust
+                </p>
+            </div>
+            
+            <!-- Modal Footer -->
+            <div class="px-6 py-4 border-t border-gray-200 flex items-center justify-end space-x-3">
+                <button type="button" id="cancelCrop" class="px-4 py-2 text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors font-medium">
+                    Cancel
+                </button>
+                <button type="button" id="applyCrop" class="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors font-medium">
+                    Apply
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Error Toast -->
+<div id="errorToast" class="fixed top-4 right-4 z-50 hidden">
+    <div class="bg-red-500 text-white px-6 py-4 rounded-lg shadow-lg flex items-center space-x-3">
+        <svg class="w-6 h-6 flex-shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+        <span id="errorMessage">Error message here</span>
+        <button type="button" onclick="hideError()" class="ml-2 text-white hover:text-red-200">
+            <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+        </button>
+    </div>
+</div>
+
+<!-- Cropper.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.js"></script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const avatarInput = document.getElementById('avatarInput');
+    const avatarPreview = document.getElementById('avatarPreview');
+    const avatarBase64 = document.getElementById('avatarBase64');
+    const cropModal = document.getElementById('cropModal');
+    const cropImage = document.getElementById('cropImage');
+    const errorToast = document.getElementById('errorToast');
+    const errorMessage = document.getElementById('errorMessage');
+    
+    let cropper = null;
+    const MAX_FILE_SIZE = 2 * 1024 * 1024; // 2MB
+    const ALLOWED_TYPES = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+    
+    // Show error toast
+    window.showError = function(message) {
+        errorMessage.textContent = message;
+        errorToast.classList.remove('hidden');
+        setTimeout(() => {
+            hideError();
+        }, 5000);
+    };
+    
+    // Hide error toast
+    window.hideError = function() {
+        errorToast.classList.add('hidden');
+    };
+    
+    // Open crop modal
+    function openCropModal(imageSrc) {
+        cropModal.classList.remove('hidden');
+        cropImage.src = imageSrc;
+        
+        // Initialize cropper after image loads
+        cropImage.onload = function() {
+            if (cropper) {
+                cropper.destroy();
+            }
+            cropper = new Cropper(cropImage, {
+                aspectRatio: 1,
+                viewMode: 1,
+                dragMode: 'move',
+                autoCropArea: 1,
+                cropBoxMovable: false,
+                cropBoxResizable: false,
+                toggleDragModeOnDblclick: false,
+                minContainerWidth: 300,
+                minContainerHeight: 256,
+                background: true,
+                modal: true,
+                guides: true,
+                center: true,
+                highlight: false,
+                cropBoxResizable: false,
+                ready: function() {
+                    // Round crop box
+                    const cropBox = document.querySelector('.cropper-view-box');
+                    const face = document.querySelector('.cropper-face');
+                    if (cropBox) {
+                        cropBox.style.borderRadius = '50%';
+                    }
+                    if (face) {
+                        face.style.borderRadius = '50%';
+                    }
+                }
+            });
+        };
+    }
+    
+    // Close crop modal
+    function closeCropModal() {
+        cropModal.classList.add('hidden');
+        if (cropper) {
+            cropper.destroy();
+            cropper = null;
+        }
+        avatarInput.value = '';
+    }
+    
+    // Handle file selection
+    avatarInput.addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        
+        if (!file) return;
+        
+        // Validate file type
+        if (!ALLOWED_TYPES.includes(file.type)) {
+            showError('Please select a valid image file (JPG, PNG, GIF, or WebP)');
+            avatarInput.value = '';
+            return;
+        }
+        
+        // Validate file size
+        if (file.size > MAX_FILE_SIZE) {
+            const sizeMB = (file.size / (1024 * 1024)).toFixed(2);
+            showError(`File is too large (${sizeMB}MB). Maximum size is 2MB.`);
+            avatarInput.value = '';
+            return;
+        }
+        
+        // Read and open cropper
+        const reader = new FileReader();
+        reader.onload = function(event) {
+            openCropModal(event.target.result);
+        };
+        reader.readAsDataURL(file);
+    });
+    
+    // Crop controls
+    document.getElementById('zoomIn').addEventListener('click', function() {
+        if (cropper) cropper.zoom(0.1);
+    });
+    
+    document.getElementById('zoomOut').addEventListener('click', function() {
+        if (cropper) cropper.zoom(-0.1);
+    });
+    
+    document.getElementById('rotateLeft').addEventListener('click', function() {
+        if (cropper) cropper.rotate(-45);
+    });
+    
+    document.getElementById('rotateRight').addEventListener('click', function() {
+        if (cropper) cropper.rotate(45);
+    });
+    
+    document.getElementById('resetCrop').addEventListener('click', function() {
+        if (cropper) cropper.reset();
+    });
+    
+    // Apply crop
+    document.getElementById('applyCrop').addEventListener('click', function() {
+        if (cropper) {
+            const canvas = cropper.getCroppedCanvas({
+                width: 256,
+                height: 256,
+                imageSmoothingEnabled: true,
+                imageSmoothingQuality: 'high'
+            });
+            
+            const base64 = canvas.toDataURL('image/jpeg', 0.9);
+            
+            // Update preview
+            avatarPreview.innerHTML = `<img src="${base64}" alt="Avatar Preview" class="w-full h-full object-cover">`;
+            
+            // Store base64 in hidden input
+            avatarBase64.value = base64;
+            
+            closeCropModal();
+        }
+    });
+    
+    // Cancel crop
+    document.getElementById('cancelCrop').addEventListener('click', closeCropModal);
+    document.getElementById('closeCropModal').addEventListener('click', closeCropModal);
+    
+    // Close modal on backdrop click
+    cropModal.addEventListener('click', function(e) {
+        if (e.target === cropModal || e.target.classList.contains('bg-black')) {
+            closeCropModal();
+        }
+    });
+    
+    // Close modal on Escape key
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && !cropModal.classList.contains('hidden')) {
+            closeCropModal();
+        }
+    });
+});
+</script>
+
+<style>
+/* Round cropper */
+.cropper-view-box,
+.cropper-face {
+    border-radius: 50%;
+}
+
+.cropper-view-box {
+    box-shadow: 0 0 0 1px #39f;
+    outline: 0;
+}
+
+.cropper-dashed {
+    display: none;
+}
+</style>
+{% endblock %}

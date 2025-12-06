@@ -117,6 +117,7 @@ frontend/.env
 frontend/.env.local
 frontend/.env.development.local
 frontend/.env.production.local
+frontend_python/.env
 
 # ============= IDEs & Editors =============
 # VS Code
@@ -204,3 +205,14 @@ credentials.json
 # Add any project-specific ignores here
 # test-results/
 # screenshots/
+
+# Environment variables
+.env
+
+# IDE/Editor specific
+.vscode/
+.idea/
+
+# OS generated files
+.DS_Store
+Thumbs.db
